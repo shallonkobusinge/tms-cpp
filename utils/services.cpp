@@ -7,60 +7,47 @@
 
 
 class TmsService{
-    public:
+public:
     static void createAccount(Account account){
-        ofstream file;
-        file.open("accounts.txt", ios::app);
-        file << account.firstName << "," << account.lastName << "," << account.email << "," << account.accountPassCode << "," << account.accountNumber << "," << account.address << endl;
-        file.close();
-    }
+    ofstream file;
+    file.open("accounts.txt",ios::app);
+    file << " FIRSTNAME : "<< account.firstName << " LASTNAME : " << account.lastName << " EMAIL :  " << account.email << " ACCOUNT NUMBER : "<< account.accountNumber << " ACCOUNT PASSCODE : "<< account.accountPassCode << endl;
+    file.close();
+    cout<< "Account for  "<<account.firstName <<" " <<account.lastName<<" created successfully" << endl;
 
-    static void createTransaction(Transaction transaction){
-        ofstream file;
-        file.open("transactions.txt", ios::app);
-        file << transaction.accountId << "," << transaction.transactionType << "," << transaction.balance << endl;
-        file.close();
-    }
-
-    static vector<Account> getAccounts(){
-        vector<Account> accounts;
-        ifstream file;
-        file.open("accounts.txt");
+    };
+    static void depositAmount(){
+        cout<<"Depositing amount..."<<endl;
+    };
+    static void withDrawAmount(){
+        cout<<"Withdrawing amount..."<<endl;
+    };
+    static void closeAccount(){
+        cout<<"Closing account..."<<endl;
+    };
+    static void getAccountDetailsByName(string accountNumber){
+        ifstream file("accounts.txt");
         string line;
-        while(getline(file, line)){
-            stringstream ss(line);
-            string firstName, lastName, email, accountPassCode, accountNumber, address;
-            getline(ss, firstName, ',');
-            getline(ss, lastName, ',');
-            getline(ss, email, ',');
-            getline(ss, accountPassCode, ',');
-            getline(ss, accountNumber, ',');
-            getline(ss, address, ',');
-            Account account;
-            account.firstName = firstName;
-            account.lastName = lastName;
-            account.email = email;
-            account.accountPassCode = accountPassCode;
-            account.accountNumber = stoi(accountNumber);
-            account.address = address;
-            accounts.push_back(account);
+        bool found = false;
+        while (getline(file,line) && !found){
+            if(line.find(accountNumber) != string::npos){
+                found = true;
+                cout<<line<<endl;
+            }
         }
-        file.close();
-        return accounts;
-    }
+        if(!found){
+            cout<<"Account not found"<<endl;
+        }
+    };
+    static void updateAccount(){
+        cout<<"Updating account..."<<endl;
+    };
+    static void getAllAccounts(){
+        cout<<"Getting all accounts..."<<endl;
+//        vector<Account> accounts;
+//        return accounts;
+    };
 
-    static vector<Transaction> getTransactions(){
-        vector<Transaction> transactions;
-        ifstream file;
-        file.open("transactions.txt");
-        string line;
-        while(getline(file, line)) {
-            stringstream ss(line);
-            string accountId, transactionType, balance;
-
-            getline(ss, accountId, ',');
-        }
-        }
 
 };
 

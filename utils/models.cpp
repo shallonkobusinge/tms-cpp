@@ -1,7 +1,9 @@
 //
 // Created by kobsh on 01/07/2022.
 //
-#include "headers.h"
+#include "iostream"
+#pragma once
+using namespace std;
 
 
 enum TransactionType{
@@ -17,8 +19,6 @@ public:
     string email;
     string accountPassCode;
     int accountNumber;
-    string address;
-
 };
 
 
