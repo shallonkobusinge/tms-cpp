@@ -114,10 +114,10 @@ void depositOrDrawAmount(){
 
 void displayAllTransactions(vector<Transaction> transactions){
     cout<<"TRANSACTIONS"<<endl;
-    cout<<"           ACCOUNT NUMBER           |           AMOUNT           |           TYPE       |"<<endl;
+    cout<<"           ACCOUNT NUMBER           |           BALANCE           |           TYPE       |   DATE                "<<endl;
     cout<<"-----------------------------------------------------------------------------------------"<<endl;
     for(int i=0; i<transactions.size(); i++){
-        cout<<"           "<<transactions[i].getAccountId()<<"           "<<transactions[i].getBalance()<<"           "<<transactions[i].getTransactionType()<<endl;
+        cout<<"           "<<transactions[i].getAccountId()<<"           "<<transactions[i].getBalance()<<"           "<<transactions[i].getTransactionType()<<"           "<<transactions[i].date<<endl;
         cout<<"-------------------------------------------------------------------------------------"<<endl;
     }
 }

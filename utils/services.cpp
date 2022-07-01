@@ -8,6 +8,23 @@
 
 class TmsService {
 public:
+    static tm now() {
+        time_t now = time(0);
+        return *localtime(&now);
+    }
+    static ostream& formatDateTime(ostream& out, const tm& t, const char* fmt) {
+        const time_put<char>& dateWriter = use_facet<time_put<char> >(out.getloc());
+        int n = strlen(fmt);
+        if (dateWriter.put(out, out, ' ', &t, fmt, fmt + n).failed()) {
+            throw runtime_error("failure to format date time");
+        }
+        return out;
+    }
+    static string dateTimeToString(const tm& t, const char* format) {
+        stringstream s;
+        formatDateTime(s, t, format);
+        return s.str();
+    }
     static void createAccount(Account account) {
         ofstream file;
         file.open("accounts.txt", ios::app);
@@ -21,19 +38,15 @@ public:
             cout << "Account already exists" << endl;
         }
     };
-
     static void depositAmount() {
         cout << "Depositing amount..." << endl;
     };
-
     static void withDrawAmount() {
         cout << "Withdrawing amount..." << endl;
     };
-
     static void closeAccount() {
         cout << "Closing account..." << endl;
     };
-
     static void getAccountDetailsByName(string accountNumber) {
         ifstream file("accounts.txt");
         string line;
@@ -48,11 +61,9 @@ public:
             cout << "Account line not found" << endl;
         }
     };
-
     static void updateAccount() {
         cout << "Updating account..." << endl;
     };
-
     static vector<Account> returnAllAccounts() {
         vector<Account> accounts;
         ifstream file("accounts.txt");
@@ -64,7 +75,6 @@ public:
         }
         return accounts;
     };
-
     static Account getSingleAccount(const string &line) {
         stringstream ss(line);
         Account account;
@@ -81,8 +91,6 @@ public:
         }
         return account;
     }
-
-
     static bool checkIfAccountExists(int accountNumber) {
         vector<Account> accounts = returnAllAccounts();
         for (int i = 0; i < accounts.size(); i++) {
@@ -92,7 +100,6 @@ public:
         }
         return false;
     }
-
     static Account findByAccountNumber(string accountNumber) {
         vector<Account> accounts = returnAllAccounts();
         Account account;
@@ -208,6 +215,7 @@ public:
     static void depositOrWithDrawAmount(int accountNumber, bool isDeposit){
     Transaction transaction;
     ofstream file;
+    string dt= dateTimeToString(now(),"%Y-%m-%d-%H:%M:%S");
     file.open("transaction.txt",ios::app);
         bool isAccountExists = checkIfAccountExists(accountNumber);
     if(isAccountExists){
@@ -221,7 +229,7 @@ public:
                  transaction.balance+=depositAmount;
                  transaction.setTransactionType("DEPOSIT");
                  cout<<" Deposteddd amount "<<transaction.balance<< endl;
-                    file<<accountNumber<< " " << " " <<transaction.getBalance()<<" "<<transaction.getTransactionType()<<endl;
+                    file<<accountNumber<< " " << " " <<transaction.getBalance()<<" "<<transaction.getTransactionType()<<"   " <<dt<<endl;
              }
              if(!isDeposit){
                  int withdrawAmount;
@@ -233,7 +241,7 @@ public:
                     }else{
                         transaction.balance -= withdrawAmount;
                         transaction.transactionType = "WITHDRAW";
-                        file<<accountNumber<< " " << " " <<transaction.getBalance()<<" "<<transaction.getTransactionType()<<endl;
+                        file<<accountNumber<< " " << " " <<transaction.getBalance()<<"   "<<transaction.getTransactionType()<<"   "<<dt<<endl;
                     }
              }
             cout<<" already exists "<<transaction.getBalance()<<endl;
@@ -245,7 +253,7 @@ public:
             transaction.balance = 0.00+amount;
             transaction.transactionType = "DEPOSIT";
             transaction.accountId = accountNumber;
-            file << transaction.accountId << " " << " " << transaction.balance << " " << transaction.transactionType << endl;
+            file << transaction.accountId << " " << " " << transaction.balance << " " << transaction.transactionType<<"  "<<dt << endl;
             cout<<" balance "<<transaction.getBalance()<<endl;
         }
     }else{
@@ -253,40 +261,6 @@ public:
     }
     file.close();
     }
-//    static Transaction depositOrWithDrawAmount(int accountNumber, double amount, bool isDeposit) {
-//        bool account = checkIfAccountExists(accountNumber);
-//        Account existingAccount = findAccountByAccountNumberFromAFile(accountNumber);
-//        ofstream file;
-//        file.open("transaction.txt", ios::app);
-////        file<<"         ACCOUNT ID |         AMOUNT |         TYPE "<<endl;
-//        if(account){
-//            bool isTransactionExisting = checkIfTransactionExistsByAccountId(accountNumber);
-//            if(isTransactionExisting){
-//                Transaction transaction = findTransactionByAccountId(accountNumber);
-//
-//            }else{
-//                Transaction newTransaction;
-//                if(isDeposit) {
-//                    newTransaction.setTransactionType("DEPOSIT");
-//                    newTransaction.balance += amount;
-//                    newTransaction.setAccountId(existingAccount.accountNumber);
-//                file <<"         "<< newTransaction.getAccountId() << "         " << newTransaction.getBalance() << "         " << newTransaction.getTransactionType() << endl;
-//
-//            }else{
-//                    newTransaction.transactionType = "WITHDRAW";
-//                    newTransaction.balance -= amount;
-//                    newTransaction.accountId = existingAccount.accountNumber;
-//                file << newTransaction.getAccountId() << "  " << newTransaction.getBalance() << "  " << newTransaction.getTransactionType() << endl;
-//            }
-//            }
-//
-//
-//
-////            file.close();
-////            return transaction;
-//
-//        }
-//    };
     static Transaction getSingleTransaction(const string &line){
         stringstream ss(line);
         Transaction transaction;
@@ -298,6 +272,7 @@ public:
             if (i == 0) transaction.accountId = stoi(rowElement);
             else if (i == 1) transaction.balance = stoi(rowElement);
             else if (i == 2) transaction.transactionType = rowElement;
+            else if(i == 3) transaction.date = rowElement;
             i++;
         }
         return transaction;
@@ -314,9 +289,7 @@ public:
         }
         return transactions;
     };
-
-
-};
+    };
 
 
 

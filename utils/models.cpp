@@ -27,6 +27,7 @@ public:
     int accountId;
     string transactionType;
     double balance;
+    string date;
 public:
     int getAccountId() {
         return accountId;
