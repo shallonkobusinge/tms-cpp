@@ -97,16 +97,14 @@ void depositOrDrawAmount(){
 
     cout<<"Enter account number: "<<endl;
     cin>>accountNumber;
-    cout<<"Enter amount: "<<endl;
-    cin>>amount;
     cout<<"Enter 1 for deposit or 2 for withdraw: "<<endl;
     cin>>depositOrDraw;
     switch (depositOrDraw) {
         case '1':
-            TmsService::depositOrWithDrawAmount(accountNumber,amount, true);
+            TmsService::depositOrWithDrawAmount(accountNumber, true);
             break;
         case '2':
-            TmsService::depositOrWithDrawAmount(accountNumber,amount, false);
+            TmsService::depositOrWithDrawAmount(accountNumber, false);
             break;
             default:
                 cout<<"Invalid input"<<endl;

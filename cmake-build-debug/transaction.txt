@@ -1,3 +1,4 @@
-DEPOSIT  5000  2000
-         ACCOUNT ID |         AMOUNT |         TYPE 
-         DEPOSIT         2000         1500
+1010  1000 DEPOSIT
+1200  4000 DEPOSIT
+1010  4000 Deposit
+1010  2000 WITHDRAW
