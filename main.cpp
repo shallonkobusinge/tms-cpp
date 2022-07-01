@@ -40,8 +40,11 @@ void displayAccounts(vector<Account> account){
     cout<<"----------------------------------------------------------------------------------------------------------------------"<<endl;
 }
 
-void displaySingleAccount(Account account){
-
+void displaySingleAccount(){
+    string number;
+    cout<<"Enter account number: "<<endl;
+    getline(cin,number);
+    Account account = TmsService::findByAccountNumber(number);
     cout<<"     FIRST NAME       |     LAST NAME       |     EMAIL       |     ACOUNT NUMBER       |     ACCOUNT PASS CODE       |"<<endl;
     cout<<"----------------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"       "<<account.firstName<<"                "<<account.lastName<<"               "<<account.email<<"                "<<account.accountNumber<<"           "<<account.accountPassCode<<"       "<<endl;
@@ -61,6 +64,29 @@ void deleteFromFile(){
     cout<<"Enter account number: "<<endl;
     cin>>accountNumber;
     TmsService::deleteAccountFromAFile(accountNumber);
+}
+
+void modifyAccount(){
+    string accountNumber;
+    cout<<" Enter the account number that you want to update "<<endl;
+    cin>>accountNumber;
+    cout<<" Enter the new details "<<endl;
+    Account account;
+    cout<<"Enter first name: "<<endl;
+    cin>>account.firstName;
+    cout<<"Enter last name: "<<endl;
+    cin>>account.lastName;
+
+    cout<<"Enter email: "<<endl;
+    cin>>account.email;
+
+//    cout<<"Enter account number: "<<endl;
+//    cin>>account.accountNumber;
+//    cout<<"Enter account pass code: "<<endl;
+//    cin>>account.accountPassCode;
+
+    Account NewAccount = TmsService::updateAccount(accountNumber,account);
+//    cout<<"Account for "<<NewAccount.firstName<<" "<<NewAccount.lastName<<" updated successfully"<<endl;
 }
 
 int main() {
@@ -100,13 +126,10 @@ int main() {
                 displayAccounts(service.returnAllAccounts());
                 break;
             case '7':
-                service.updateAccount();
+                modifyAccount();
                 break;
             case '8':
-                int number;
-                cout<<"Enter account number: "<<endl;
-                cin>>number;
-             displaySingleAccount(service.findByAccountNumber(number));
+                displaySingleAccount();
                 break;
             case '9':
                 break;

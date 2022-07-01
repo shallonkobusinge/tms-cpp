@@ -93,11 +93,11 @@ public:
         return false;
     }
 
-    static Account findByAccountNumber(int accountNumber) {
+    static Account findByAccountNumber(string accountNumber) {
         vector<Account> accounts = returnAllAccounts();
         Account account;
         for (int i = 0; i < accounts.size(); i++) {
-            if (accounts[i].accountNumber == accountNumber) {
+            if (accounts[i].accountNumber == stoi( accountNumber )|| accounts[i].accountPassCode == accountNumber) {
                 account = accounts[i];
             } else {
                 cout << "Account not found" << endl;
@@ -135,18 +135,49 @@ public:
         remove("accounts.txt");
         rename("temp.txt","accounts.txt");
     };
-    static Account updateAccount(int accountNumber, Account newBody){
-        vector<Account> accounts = returnAllAccounts();
+//    static Account updateAccount(int accountNumber, Account newBody) {
+//        Account account = getSingleAccount(accountNumber);
+//    }
+
+    static Account findAccountByAccountNumberFromAFile(int accountNumber){
         Account account;
-        for (int i = 0; i < accounts.size(); i++) {
-            if (accounts[i].accountNumber == accountNumber) {
-                accounts[i] = newBody;
-                account = accounts[i];
-            } else {
-                cout << "Account not found" << endl;
+        ifstream file("accounts.txt");
+        string line;
+        while (getline(file, line)) {
+            if (line.find(to_string(accountNumber)) != string::npos) {
+                account = getSingleAccount(line);
             }
         }
         return account;
+    }
+    static Account updateAccount(string accountNumber,Account newBody) {
+
+    Account account =  findByAccountNumber(accountNumber);
+//    account.firstName = newBody.firstName;
+//    account.lastName = newBody.lastName;
+//    account.email = newBody.email;
+//    newBody.accountNumber = account.accountNumber;
+//    newBody.accountPassCode = account.accountPassCode;
+        ofstream temp;
+        temp.open("temp.txt");
+        ifstream file("accounts.txt");
+        string line;
+        while (getline(file, line)) {
+            if (line.find(accountNumber) != string::npos) {
+                cout <<"the one" <<line << endl;
+            } else{
+                temp<<line<<endl;
+            }
+
+        }
+        temp<< newBody.firstName << "  " << newBody.lastName << "  " << newBody.email << "  "
+            << account.accountNumber << "  " << account.accountPassCode << "  " << endl;
+        file.close();
+        temp.close();
+        remove("accounts.txt");
+        rename("temp.txt","accounts.txt");
+        return account;
+
     };
 };
 
