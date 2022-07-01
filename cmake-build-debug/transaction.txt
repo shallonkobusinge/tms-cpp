@@ -1,0 +1,3 @@
+DEPOSIT  5000  2000
+         ACCOUNT ID |         AMOUNT |         TYPE 
+         DEPOSIT         2000         1500

@@ -89,6 +89,43 @@ void modifyAccount(){
     cout<<"Account for "<<NewAccount.firstName<<" "<<NewAccount.lastName<<" updated successfully"<<endl;
 }
 
+
+void depositOrDrawAmount(){
+    int accountNumber;
+    int amount;
+    char depositOrDraw;
+
+    cout<<"Enter account number: "<<endl;
+    cin>>accountNumber;
+    cout<<"Enter amount: "<<endl;
+    cin>>amount;
+    cout<<"Enter 1 for deposit or 2 for withdraw: "<<endl;
+    cin>>depositOrDraw;
+    switch (depositOrDraw) {
+        case '1':
+            TmsService::depositOrWithDrawAmount(accountNumber,amount, true);
+            break;
+        case '2':
+            TmsService::depositOrWithDrawAmount(accountNumber,amount, false);
+            break;
+            default:
+                cout<<"Invalid input"<<endl;
+                break;
+    }
+}
+
+void displayAllTransactions(vector<Transaction> transactions){
+    cout<<"TRANSACTIONS"<<endl;
+    cout<<"           ACCOUNT NUMBER           |           AMOUNT           |           TYPE       |"<<endl;
+    cout<<"-----------------------------------------------------------------------------------------"<<endl;
+    for(int i=0; i<transactions.size(); i++){
+        cout<<"           "<<transactions[i].getAccountId()<<"           "<<transactions[i].getBalance()<<"           "<<transactions[i].getTransactionType()<<endl;
+        cout<<"-------------------------------------------------------------------------------------"<<endl;
+    }
+}
+
+
+
 int main() {
     int number;
     char option;
@@ -98,8 +135,8 @@ int main() {
         cout<<                     " TRANSACTION MANAGEMENT SYSTEM                        "<<endl;
         cout<<"                   1. CREATE NEW ACCOUNT                                   "<<endl;
         cout<<"                   2. DISPLAY ACCOUNT BY A LINE IN A FILE                  "<<endl;
-        cout<<"                   3. DEPOSIT AMOUNT                                       "<<endl;
-        cout<<"                   4. WITHDRAW AMOUNT                                      "<<endl;
+        cout<<"                   3. DEPOSIT OR WITHDRAW AMOUNT                           "<<endl;
+        cout<<"                   4. LIST ALL TRANSACTIONS                                "<<endl;
         cout<<"                   5. CLOSE ACCOUNT                                        "<<endl;
         cout<<"                   6. DISPLAY ALL ACCOUNTS                                 "<<endl;
         cout<<"                   7. UPDATE ACCOUNT                                       "<<endl;
@@ -114,10 +151,10 @@ int main() {
                 findByAccountNumber();
                 break;
             case '3':
-                service.depositAmount();
+                depositOrDrawAmount();
                 break;
             case '4':
-                service.withDrawAmount();
+                displayAllTransactions(service.returnAllTransactions());
                 break;
             case '5':
                 deleteFromFile();

@@ -170,6 +170,60 @@ public:
         return account;
 
     };
+    static Transaction depositOrWithDrawAmount(int accountNumber, double amount, bool isDeposit) {
+        bool account = checkIfAccountExists(accountNumber);
+        Account existingAccount = findAccountByAccountNumberFromAFile(accountNumber);
+        ofstream file;
+        file.open("transaction.txt", ios::app);
+        file<<"         ACCOUNT ID |         AMOUNT |         TYPE "<<endl;
+        if(account){
+            Transaction transaction;
+            if(isDeposit) {
+                transaction.setTransactionType("DEPOSIT");
+                transaction.balance += amount;
+                transaction.setAccountId(existingAccount.accountNumber);
+                file <<"         "<< transaction.getTransactionType() << "         " << transaction.balance << "         " << transaction.getAccountId() << endl;
+
+            }else{
+                transaction.transactionType = "WITHDRAW";
+                transaction.balance -= amount;
+                transaction.accountId = existingAccount.accountNumber;
+                file << transaction.transactionType << "  " << transaction.balance << "  " << transaction.accountId << endl;
+            }
+            file.close();
+            return transaction;
+
+        }
+    };
+    static Transaction getSingleTransaction(const string &line){
+        stringstream ss(line);
+        Transaction transaction;
+        int i = 0;
+
+        for (string rowElement; ss >> rowElement;) {
+            if (reinterpret_cast<const char *>(rowElement[rowElement.length() - 1]) == "")
+                rowElement.pop_back();
+            if (i == 0) transaction.transactionType = rowElement;
+            else if (i == 1) transaction.balance = stod(rowElement);
+            else if (i == 2) transaction.accountId = stoi(rowElement);
+            i++;
+        }
+        return transaction;
+
+    }
+    static vector<Transaction> returnAllTransactions() {
+        vector<Transaction> transactions;
+        ifstream file("transaction.txt");
+        string line;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            Transaction transaction = getSingleTransaction(line);
+            transactions.push_back(transaction);
+        }
+        return transactions;
+    };
+
+
 };
 
 

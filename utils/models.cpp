@@ -6,7 +6,7 @@
 using namespace std;
 
 
-enum TransactionType{
+enum TransactionTypeEnum {
     DEPOSIT,
     WITHDRAW
 };
@@ -25,7 +25,26 @@ public:
 class Transaction{
 public:
     int accountId;
-    TransactionType transactionType;
+    string transactionType;
     double balance;
+public:
+    int getAccountId() {
+        return accountId;
+    }
+    void setAccountId(int accountId) {
+        this->accountId = accountId;
+    }
+    string getTransactionType() {
+        return transactionType;
+    }
+    void setTransactionType(string transactionType) {
+        this->transactionType = transactionType;
+    }
+    double getBalance() {
+        return balance;
+    }
+    void setBalance(double balance) {
+        this->balance = balance;
+    }
 
 };
