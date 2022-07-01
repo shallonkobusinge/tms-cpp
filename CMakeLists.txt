@@ -3,4 +3,4 @@ project(tms)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(tms main.cpp)
+add_executable(tms main.cpp utils/headers.h utils/services.cpp utils/models.cpp)
