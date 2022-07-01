@@ -6,50 +6,152 @@
 #include "models.cpp"
 
 
-class TmsService{
+class TmsService {
 public:
-    static void createAccount(Account account){
-    ofstream file;
-    file.open("accounts.txt",ios::app);
-    file << " FIRSTNAME : "<< account.firstName << " LASTNAME : " << account.lastName << " EMAIL :  " << account.email << " ACCOUNT NUMBER : "<< account.accountNumber << " ACCOUNT PASSCODE : "<< account.accountPassCode << endl;
-    file.close();
-    cout<< "Account for  "<<account.firstName <<" " <<account.lastName<<" created successfully" << endl;
+    static void createAccount(Account account) {
+        ofstream file;
+        file.open("accounts.txt", ios::app);
+        bool existingAccount = checkIfAccountExists(account.accountNumber);
+        if (!existingAccount) {
+            file << account.firstName << "  " << account.lastName << "  " << account.email << "  "
+                 << account.accountNumber << "  " << account.accountPassCode << "  " << endl;
+            file.close();
+            cout << "Account for  " << account.firstName << " " << account.lastName << " created successfully" << endl;
+        } else {
+            cout << "Account already exists" << endl;
+        }
+    };
 
+    static void depositAmount() {
+        cout << "Depositing amount..." << endl;
     };
-    static void depositAmount(){
-        cout<<"Depositing amount..."<<endl;
+
+    static void withDrawAmount() {
+        cout << "Withdrawing amount..." << endl;
     };
-    static void withDrawAmount(){
-        cout<<"Withdrawing amount..."<<endl;
+
+    static void closeAccount() {
+        cout << "Closing account..." << endl;
     };
-    static void closeAccount(){
-        cout<<"Closing account..."<<endl;
-    };
-    static void getAccountDetailsByName(string accountNumber){
+
+    static void getAccountDetailsByName(string accountNumber) {
         ifstream file("accounts.txt");
         string line;
         bool found = false;
-        while (getline(file,line) && !found){
-            if(line.find(accountNumber) != string::npos){
+        while (getline(file, line) && !found) {
+            if (line.find(accountNumber) != string::npos) {
                 found = true;
-                cout<<line<<endl;
+                cout << line << endl;
             }
         }
-        if(!found){
-            cout<<"Account not found"<<endl;
+        if (!found) {
+            cout << "Account line not found" << endl;
         }
     };
-    static void updateAccount(){
-        cout<<"Updating account..."<<endl;
-    };
-    static void getAllAccounts(){
-        cout<<"Getting all accounts..."<<endl;
-//        vector<Account> accounts;
-//        return accounts;
+
+    static void updateAccount() {
+        cout << "Updating account..." << endl;
     };
 
+    static vector<Account> returnAllAccounts() {
+        vector<Account> accounts;
+        ifstream file("accounts.txt");
+        string line;
+        while (getline(file, line)) {
+            stringstream ss(line);
+            Account account = getSingleAccount(line);
+            accounts.push_back(account);
+        }
+        return accounts;
+    };
 
+    static Account getSingleAccount(const string &line) {
+        stringstream ss(line);
+        Account account;
+        int i = 0;
+        for (string rowElement; ss >> rowElement;) {
+            if (reinterpret_cast<const char *>(rowElement[rowElement.length() - 1]) == "")
+                rowElement.pop_back();
+            if (i == 0) account.firstName = rowElement;
+            else if (i == 1) account.lastName = rowElement;
+            else if (i == 2) account.email = rowElement;
+            else if (i == 3) account.accountNumber = stoi(rowElement);
+            else if (i == 4) account.accountPassCode = rowElement;
+            i++;
+        }
+        return account;
+    }
+
+
+    static bool checkIfAccountExists(int accountNumber) {
+        vector<Account> accounts = returnAllAccounts();
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts[i].accountNumber == accountNumber) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static Account findByAccountNumber(int accountNumber) {
+        vector<Account> accounts = returnAllAccounts();
+        Account account;
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts[i].accountNumber == accountNumber) {
+                account = accounts[i];
+            } else {
+                cout << "Account not found" << endl;
+            }
+        }
+        return account;
+    };
+    static Account removeAccount(int accountNumber) {
+        vector<Account> accounts = returnAllAccounts();
+        Account account;
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts[i].accountNumber == accountNumber) {
+                account = accounts[i];
+                accounts.erase(accounts.begin() + i);
+            } else {
+                cout << "Account not found" << endl;
+            }
+        }
+        return account;
+    };
+    static void deleteAccountFromAFile(string accountPassCode) {
+        ofstream temp;
+        temp.open("temp.txt");
+        ifstream file("accounts.txt");
+        string line;
+        while (getline(file, line)) {
+            if (line.find(accountPassCode) != string::npos) {
+                cout <<"the one" <<line << endl;
+            } else{
+                temp<<line<<endl;
+            }
+        }
+        file.close();
+        temp.close();
+        remove("accounts.txt");
+        rename("temp.txt","accounts.txt");
+    };
+    static Account updateAccount(int accountNumber, Account newBody){
+        vector<Account> accounts = returnAllAccounts();
+        Account account;
+        for (int i = 0; i < accounts.size(); i++) {
+            if (accounts[i].accountNumber == accountNumber) {
+                accounts[i] = newBody;
+                account = accounts[i];
+            } else {
+                cout << "Account not found" << endl;
+            }
+        }
+        return account;
+    };
 };
+
+
+
 
 
 
