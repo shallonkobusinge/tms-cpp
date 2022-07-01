@@ -135,10 +135,6 @@ public:
         remove("accounts.txt");
         rename("temp.txt","accounts.txt");
     };
-//    static Account updateAccount(int accountNumber, Account newBody) {
-//        Account account = getSingleAccount(accountNumber);
-//    }
-
     static Account findAccountByAccountNumberFromAFile(int accountNumber){
         Account account;
         ifstream file("accounts.txt");
@@ -153,11 +149,6 @@ public:
     static Account updateAccount(string accountNumber,Account newBody) {
 
     Account account =  findByAccountNumber(accountNumber);
-//    account.firstName = newBody.firstName;
-//    account.lastName = newBody.lastName;
-//    account.email = newBody.email;
-//    newBody.accountNumber = account.accountNumber;
-//    newBody.accountPassCode = account.accountPassCode;
         ofstream temp;
         temp.open("temp.txt");
         ifstream file("accounts.txt");

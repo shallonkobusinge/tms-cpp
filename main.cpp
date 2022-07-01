@@ -86,7 +86,7 @@ void modifyAccount(){
 //    cin>>account.accountPassCode;
 
     Account NewAccount = TmsService::updateAccount(accountNumber,account);
-//    cout<<"Account for "<<NewAccount.firstName<<" "<<NewAccount.lastName<<" updated successfully"<<endl;
+    cout<<"Account for "<<NewAccount.firstName<<" "<<NewAccount.lastName<<" updated successfully"<<endl;
 }
 
 int main() {
